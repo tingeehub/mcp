@@ -1,0 +1,47 @@
+name: Publish to npm
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: release
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v6.3.0
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: npm ci
+
+      # Kiểm tra server khởi động và đăng ký đủ tool trước khi publish
+      - run: npm run check
+
+      # Tự chọn dist-tag theo version:
+      #   0.2.0-beta.1 → --tag beta, tương tự next / alpha / rc
+      #   0.2.0        → --tag latest
+      - name: Publish to npm
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if echo "$VERSION" | grep -qE '\-beta'; then
+            TAG="beta"
+          elif echo "$VERSION" | grep -qE '\-next'; then
+            TAG="next"
+          elif echo "$VERSION" | grep -qE '\-alpha'; then
+            TAG="alpha"
+          elif echo "$VERSION" | grep -qE '\-rc'; then
+            TAG="rc"
+          else
+            TAG="latest"
+          fi
+          echo "Publishing version $VERSION with tag: $TAG"
+          npm publish --tag $TAG --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

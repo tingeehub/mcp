@@ -1,0 +1,48 @@
+{
+  "name": "@tingee/mcp",
+  "version": "0.1.0",
+  "description": "MCP server của Tingee: tra cứu tài liệu Open API và thư viện backend cho trợ lý AI",
+  "keywords": [
+    "tingee",
+    "mcp",
+    "model-context-protocol",
+    "open-api"
+  ],
+  "homepage": "https://developers.tingee.vn/docs/sdk/ai-tools",
+  "bugs": {
+    "url": "https://github.com/tingeehub/mcp/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tingeehub/mcp.git"
+  },
+  "license": "ISC",
+  "author": {
+    "name": "Tingee",
+    "email": "developer@heno.vn",
+    "url": "https://tingee.vn"
+  },
+  "type": "module",
+  "bin": {
+    "tingee-mcp": "index.js"
+  },
+  "scripts": {
+    "check": "node scripts/check.js"
+  },
+  "files": [
+    "index.js",
+    "lib/",
+    "tools/",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "^4.6.7"
+  }
+}
